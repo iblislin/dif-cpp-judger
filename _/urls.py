@@ -8,8 +8,10 @@ urlpatterns = patterns('',
     # url(r'^$', '_.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^$', 'center.views.index', name='index'),
+    url(r'^auth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^admin/', include(admin.site.urls)),
-    url('', include('social.apps.django_app.urls', namespace='social'))
+    url(r'^center/', include('center.urls', namespace='center')),
 )
 
 

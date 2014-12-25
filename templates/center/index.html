@@ -1,0 +1,14 @@
+{% extends "center/base.html" %}
+
+{% load static %}
+
+{% block title %} Index {% endblock title %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'center/index.css' %}">
+{% endblock head %}
+
+{% block main %}
+	<a type="button" class="btn btn-default" href="{% url 'center:login' %}" id="fb-login-btn">
+	</a>
+{% endblock main %}

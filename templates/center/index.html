@@ -9,6 +9,9 @@
 {% endblock head %}
 
 {% block main %}
-	<a type="button" class="btn btn-default" href="{% url 'center:login' %}" id="fb-login-btn">
-	</a>
+	{% if not user.is_authenticated %}
+		<a type="button" class="btn btn-default" href="{% url 'center:login' %}" id="fb-login-btn">
+		</a>
+	{% else %}
+	{% endif %}
 {% endblock main %}

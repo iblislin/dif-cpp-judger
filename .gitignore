@@ -1,3 +1,4 @@
 *.pyc
 *.pyo
 *.sqlite3
+static/bower_components/

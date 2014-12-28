@@ -4,3 +4,26 @@
 <div>
 	{{ question.content }}
 </div>
+
+<form role="form" method="POST"
+	data-ng-init="upload_url = '{% url 'judge:upload' question.id %}'">
+	<div class="form-group">
+		<label for="code_file"></label>
+		<input name="code_file" id="code_file" type="file" class="form-control"
+			nv-file-select
+			uploader="uploader"
+		/>
+		<li ng-repeat="item in uploader.queue">
+			Name: <span data-ng-bind="item.file.name"></span><br/>
+			<button data-ng-click="upload_code(item)">upload</button>
+		</li>
+		<div class="progress">
+			<div class="progress-bar progress-bar-striped active" role="progressbar"
+				style="width: [[uploader.progress]]%;"
+				></div>
+		</div>
+		<input name="csrfmiddlewaretoken" id="csrfmiddlewaretoken_id" type="hidden" class="form-control"
+			value="{{ csrf_token }}"
+			data-ng-model="csrf_token"/>
+	</div><!-- form-group -->
+</form>

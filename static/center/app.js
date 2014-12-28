@@ -1,5 +1,5 @@
 (function(){
-	var app = angular.module('center', ['ngRoute'])
+	var app = angular.module('center', ['ngRoute', 'angularFileUpload'])
 	.config(['$interpolateProvider', '$httpProvider', '$routeProvider',
 		function($interpolateProvider, $httpProvider, $routeProvider) {
 			$interpolateProvider.startSymbol('[[');
@@ -12,7 +12,7 @@
 			$routeProvider.
 				when('/', {
 					templateUrl: url.judge.list,
-					controller: 'CenterController',
+					controllen: 'CenterController',
 				}).
 				when('/judge/list/:page?/',{
 					templateUrl: url.judge.list,
@@ -34,8 +34,22 @@
 	function($scope, $http){
 		var self = this
 	}])
-	app.controller('JudgeDetailController', ['$scope', '$http',
-	function($scope, $http){
+	app.controller('JudgeDetailController', ['$scope', '$http', 'FileUploader',
+	function($scope, $http, FileUploader){
 		var self = this
+
+		$scope.uploader = new FileUploader({
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		})
+		$scope.uploader.onErrorItem = function(i, d){
+				console.log(d)
+		}
+		$scope.upload_code = function(item){
+			item.url = $scope.upload_url
+			console.log(item.url)
+			item.upload()
+		}
 	}])
 })();

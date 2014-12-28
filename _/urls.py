@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^auth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^center/', include('center.urls', namespace='center')),
+    url(r'^judge/', include('judge.urls', namespace='judge')),
 )
 
 

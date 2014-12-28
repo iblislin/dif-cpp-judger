@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="{% block ng-app %}{% endblock ng-app %}">
 	<head>
 		{% load static bootstrap3 %}
 		<meta charset="UTF-8">
@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
 		<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 		<script src="{% static 'angular/angular.min.js' %}"></script>
+		<script src="{% static 'angular-route/angular-route.min.js' %}"></script>
 		{% block head %}
 		{% endblock head %}
 	</head>

@@ -1,0 +1,9 @@
+{% for question in questions %}
+	<div>
+		<span>
+			<a href="#{% url 'judge:detail' question.id %}">
+				{{ question.title }}
+			</a>
+		</span>
+	</div>
+{% endfor %}

@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% block ng-app %}center{% endblock ng-app %}
+
 {% block title %} Index {% endblock title %}
 
 {% block head %}
@@ -13,5 +15,20 @@
 		<a type="button" class="btn btn-default" href="{% url 'center:login' %}" id="fb-login-btn">
 		</a>
 	{% else %}
+		<ng-view>
+		</ng-view>
 	{% endif %}
+
+<script>
+if (window.location.hash == '#_=_') {
+	window.location.hash = '';
+}
+var url = {
+	judge:{
+		list: "{% url 'judge:list' %}",
+		detail: "{% url 'judge:detail' %}",
+	}
+}
+</script>
+<script src="{% static 'center/app.js' %}"></script>
 {% endblock main %}

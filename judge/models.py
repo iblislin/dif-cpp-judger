@@ -14,7 +14,13 @@ class Code(models.Model):
         ('cpp', 'C++'),
         ('text', 'plain text'),
     )
-    SUFIX_DIR = {
+    RESULT_CHOICES = {
+        ('CE', 'compiling error'),
+        ('EE', 'executing error'),
+        ('OK', 'success'),
+        ('PD', 'task pending'),
+    }
+    SUFFIX_DIR = {
         'cpp': 'cpp',
         'text': 'txt',
     }
@@ -22,8 +28,11 @@ class Code(models.Model):
     question = models.ForeignKey(Question)
     lang_type = models.CharField(max_length=128, choices=LANG_TYPE_CHOICES)
     content = models.TextField()
-    exec_result = models.TextField()
+    compile_result = models.CharField(max_length=16, choices=RESULT_CHOICES, default='PD')
+    compile_msg = models.TextField()
+    exec_result = models.CharField(max_length=16, choices=RESULT_CHOICES)
+    exec_msg = models.TextField()
 
     @property
-    def sufix(self):
-        return self.SUFIX_DIR.get(self.lang_type)
+    def suffix(self):
+        return '.' + self.SUFFIX_DIR.get(self.lang_type)

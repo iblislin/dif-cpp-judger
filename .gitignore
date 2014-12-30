@@ -3,3 +3,4 @@
 *.sqlite3
 static/bower_components/
 migrations/
+.venv

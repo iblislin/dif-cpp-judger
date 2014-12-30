@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http.response import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
-from .forms import CodeUploadForm
 from .models import Code, Question
-
+from .judgers import CppJudgerTask
 
 @login_required
 def list(request, page):
@@ -21,15 +22,27 @@ def detail(request, qid):
     ques = get_object_or_404(Question, id=qid)
     return render(request, 'judge/detail.html', {
         'question': ques,
-        'code_form': CodeUploadForm,
         })
 
 @login_required
 @csrf_exempt
+@require_http_methods(['POST'])
 def upload(request, qid):
     user = request.user
     content = request.FILES['file'].read()
     code = Code.objects.create(user_id=user.id, question_id=qid, lang_type='cpp',
         content=content)
-    print code.content
-    return JsonResponse({'status': 'ok'})
+    task = CppJudgerTask()
+    task.delay(code)
+    return JsonResponse({
+        'status': 'ok',
+        'code': code.id,
+        'result_url': reverse('judge:result', args=[code.id]),
+    })
+
+# @login_required
+def result(request, code_id):
+    code = get_object_or_404(Code, id=code_id)
+    return render(request, 'judge/result.html', {
+        'code': code,
+    })

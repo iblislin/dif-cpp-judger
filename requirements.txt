@@ -2,3 +2,6 @@ Django
 python-social-auth
 django-bootstrap3
 django-bower
+celery
+django-celery
+librabbitmq

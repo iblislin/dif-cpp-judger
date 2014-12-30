@@ -1,58 +1,66 @@
 import os
 import subprocess
 
-from abc import ABCMeta, abstractmethod
 from subprocess import check_call, check_output
+from tempfile import NamedTemporaryFile
 from uuid import uuid4
 
+from celery import Task
 from django.conf import settings
 
 from .models import Code
 
 
-class BaseJudger(object):
-    __metaclass__ = ABCMeta
+class BaseJudgerTask(Task):
+    ignore_result = True
+    abstract = True
 
-    def __init__(self, code):
+    def run(self, code):
         """
         :type code: Code
         """
         self.code = code
-        self._create_tmp_file(code.sufix)
+        self._create_tmpfile()
 
-    def _create_tmp_file(self, sufix):
-        self._filename = '{uuid}{sufix}'.format(uuid=uuid4(),
-            sufix= '.' + sufix if sufix else ''
-            )
-        self._filepath = os.path.join(settings.JUDGE_DIR, self._filename)
-        with open(self._filepath) as f:
-            f.write(self.code.content)
-
-    def __del__(self):
-        try:
-            os.remove(self._filepath)
-        except Exception as e:
-            pass
-
-    @abstractmethod
-    def run(self):
-        pass
+    def _create_tmpfile(self):
+        self._tmpfile = NamedTemporaryFile(suffix=self.code.suffix, dir=settings.JUDGE_DIR)
+        self._tmpfile.file.write(self.code.content)
+        self._tmpfile.file.close()
 
     def _check_output(self, *args, **kwargs):
         _stderr = kwargs.pop('stderr', subprocess.STDOUT)
-        return check_output(*args, **kwargs, stderr=_stderr)
+        return check_output(stderr=_stderr, *args, **kwargs)
 
 
-class CppJudger(BaseJudger):
+class CppJudgerTask(BaseJudgerTask):
     compiler = '/usr/bin/clang++'
 
     def _compile(self):
+        self._outfile = self._tmpfile.name.rstrip(self.code.suffix)
         try:
             output = self._check_output([self.compiler,
-                '-o', self._filepath, self._filepath])
+                '-o', self._outfile, self._tmpfile.name])
+            self.code.compile_result = 'OK'
         except subprocess.CalledProcessError as e:
             output = e.output
-        return output
+            self.code.compile_result = 'CE'
 
-    def run(self):
+        self.code.compile_msg = output
+
+    def _exec(self):
+        if self.code.compile_result != 'OK':
+            return
+        try:
+            output = self._check_output([self._outfile])
+            self.code.exec_result = 'OK'
+        except subprocess.CalledProcessError as e:
+            output = e.output
+            self.code.compile_result = 'EE'
+
+        self.code.exec_msg = output
+
+    def run(self, code):
+        super(CppJudgerTask, self).run(code)
         self._compile()
+        self._exec()
+        self.code.save()

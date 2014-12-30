@@ -1,3 +1,7 @@
+main {
+	width: 80%;
+	margin: 0 auto;
+}
 #fb-login-btn {
 	background-image: url('/static/center/fb.png');
 	width: 256px;

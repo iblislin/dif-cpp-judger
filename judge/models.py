@@ -5,9 +5,11 @@ from django.contrib.auth.models import User
 class Question(models.Model):
     title = models.CharField(max_length=4096)
     content = models.TextField()
-    smp_input = models.TextField() # sample input
-    smp_output = models.TextField() # sample output
+    smp_input = models.TextField(null=True) # sample input
+    smp_output = models.TextField(null=True) # sample output
 
+    def __unicode__(self):
+        return self.title
 
 class Code(models.Model):
     LANG_TYPE_CHOICES = (
@@ -29,10 +31,16 @@ class Code(models.Model):
     lang_type = models.CharField(max_length=128, choices=LANG_TYPE_CHOICES)
     content = models.TextField()
     compile_result = models.CharField(max_length=16, choices=RESULT_CHOICES, default='PD')
-    compile_msg = models.TextField()
-    exec_result = models.CharField(max_length=16, choices=RESULT_CHOICES)
-    exec_msg = models.TextField()
+    compile_msg = models.TextField(null=True)
+    exec_result = models.CharField(max_length=16, choices=RESULT_CHOICES, null=True)
+    exec_msg = models.TextField(null=True)
 
     @property
     def suffix(self):
         return '.' + self.SUFFIX_DIR.get(self.lang_type)
+
+    def __unicode__(self):
+        return '#{qid} {user} {id}'.format(qid=self.question.id,
+            user=self.user.username,
+            id=self.id,
+            )

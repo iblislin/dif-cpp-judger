@@ -1,0 +1,10 @@
+<section id="result-list">
+	<ul>
+		{% for code in codes %}
+			<li><a href="">
+				#{{ code.id }}
+				{{ code.status }}
+			</a></li>
+		{% endfor %}
+	</ul>
+</section>

@@ -37,13 +37,19 @@
 			data-ng-init="upload_url = '{% url 'judge:upload' question.id %}'"
 			>
 			<div class="form-group">
-				<input name="code_file" id="code_file" type="file"
+				{# <input name="code_file" id="code_file" type="file" #}
+				{# data-ng-file-select #}
+				{# data-ng-model="upload_file" #}
+				{# accept="*.cpp" #}
+				{# resetOnClick="true" #}
+				{# /> #}
+			</div><!-- form-group -->
+			<button type="button" class="btn btn-primary"
 				data-ng-file-select
 				data-ng-model="upload_file"
 				accept="*.cpp"
-				/>
-			</div><!-- form-group -->
-			<button type="button" class="btn btn-info">Upload</button>
+				resetOnClick="true"
+				>Upload</button>
 			{# <li ng-repeat="item in uploader.queue"> #}
 			{#	 Name: <span data-ng-bind="item.file.name"></span><br/> #}
 			{#	 <button data-ng-click="upload_code(item)">upload</button> #}
@@ -58,4 +64,11 @@
 			data-ng-model="csrf_token"/>
 		</form>
 	</section>
+</section>
+<section id="result">
+	<header>
+		<h3>Result</h3>
+	</header>
+	<ng-include src="'{% url 'judge:result' %}'">
+	</ng-include>
 </section>

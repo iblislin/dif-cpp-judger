@@ -10,6 +10,15 @@
  **********************************************/
 .sample-content,
 #content,
-#submit-content {
+#submit-content,
+#result-list{
 	padding-left: 30px;
+}
+
+/**********************************************
+ *  result list
+ **********************************************/
+#result-list ul {
+	list-style-type: none;
+	padding: 0;
 }

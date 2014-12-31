@@ -42,7 +42,14 @@ def upload(request, qid):
 
 # @login_required
 def result(request, code_id):
-    code = get_object_or_404(Code, id=code_id)
-    return render(request, 'judge/result.html', {
-        'code': code,
-    })
+    user = request.user
+
+    if code_id:
+        code = get_object_or_404(Code, id=code_id)
+        return render(request, 'judge/result.html', {
+            'code': code,
+        })
+    else:
+        return render(request, 'judge/result_list.html', {
+            'codes': Code.objects.filter(user_id=user.id).order_by('-id')[:5],
+        })

@@ -35,32 +35,24 @@ class BaseJudgerTask(Task):
 class CppJudgerTask(BaseJudgerTask):
     compiler = '/usr/bin/clang++'
 
-    def _compile(self):
-        self._outfile = self._tmpfile.name.rstrip(self.code.suffix)
-        try:
-            output = self._check_output([self.compiler,
-                '-o', self._outfile, self._tmpfile.name])
-            self.code.compile_result = 'OK'
-        except subprocess.CalledProcessError as e:
-            output = e.output
-            self.code.compile_result = 'CE'
-
-        self.code.compile_msg = output
-
-    def _exec(self):
-        if self.code.compile_result != 'OK':
-            return
-        try:
-            output = self._check_output([self._outfile])
-            self.code.exec_result = 'OK'
-        except subprocess.CalledProcessError as e:
-            output = e.output
-            self.code.compile_result = 'EE'
-
-        self.code.exec_msg = output
-
     def run(self, code):
         super(CppJudgerTask, self).run(code)
-        self._compile()
-        self._exec()
+        self._outfile = self._tmpfile.name.rstrip(self.code.suffix)
+
+        try:
+            self.code.compile_msg = self._check_output([self.compiler,
+                '-o', self._outfile, self._tmpfile.name])
+
+            try:
+                self.code.exec_msg = self._check_output([self._outfile])
+                self.code.status = 'AC'
+            except subprocess.CalledProcessError as e:
+                self.code.exec_msg = e.output
+                self.code.status = 'EE'
+
+        except subprocess.CalledProcessError as e:
+            self.code.compile_msg = e.output
+            self.code.status = 'CE'
+
+
         self.code.save()

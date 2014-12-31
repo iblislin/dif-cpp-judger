@@ -16,11 +16,12 @@ class Code(models.Model):
         ('cpp', 'C++'),
         ('text', 'plain text'),
     )
-    RESULT_CHOICES = {
-        ('CE', 'compiling error'),
-        ('EE', 'executing error'),
-        ('OK', 'success'),
-        ('PD', 'task pending'),
+    STATUS_CHOICES = {
+        ('AC', 'Acceptance'),
+        ('CE', 'Compiling error'),
+        ('EE', 'Executing error'),
+        ('PD', 'Task pending'),
+        ('WA', 'Wrong answer'),
     }
     SUFFIX_DIR = {
         'cpp': 'cpp',
@@ -30,9 +31,8 @@ class Code(models.Model):
     question = models.ForeignKey(Question)
     lang_type = models.CharField(max_length=128, choices=LANG_TYPE_CHOICES)
     content = models.TextField()
-    compile_result = models.CharField(max_length=16, choices=RESULT_CHOICES, default='PD')
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default='PD')
     compile_msg = models.TextField(null=True)
-    exec_result = models.CharField(max_length=16, choices=RESULT_CHOICES, null=True)
     exec_msg = models.TextField(null=True)
 
     @property

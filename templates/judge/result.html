@@ -1,8 +1,30 @@
 <section id="result-list">
-	<pre>
+	<section>
+		<header>
+			<h4>Compiling Message</h4>
+		</header>
+		{% if code.compile_msg %}
+			<pre>
 {{ code.compile_msg }}
-	</pre>
-	<pre>
+			</pre>
+		{% else %}
+			<p class="content-indent">
+				Wooks good! We do not get any error.
+			</p>
+		{% endif %}
+	</section>
+	<section>
+		<header>
+			<h4>Executing Message</h4>
+		</header>
+		{% if code.exec_msg %}
+			<pre>
 {{ code.exec_msg }}
-	</pre>
+			</pre>
+		{% else %}
+			<p class="content-indent">
+				Looks good! We do not get any error.
+			</p>
+		{% endif %}
+	</section>
 </section>

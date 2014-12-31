@@ -11,7 +11,8 @@
 .sample-content,
 #content,
 #submit-content,
-#result-list{
+#result-list,
+.content-indent {
 	padding-left: 30px;
 }
 #file-name {

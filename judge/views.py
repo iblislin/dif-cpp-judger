@@ -25,7 +25,6 @@ def detail(request, qid):
         })
 
 @login_required
-@csrf_exempt
 @require_http_methods(['POST'])
 def upload(request, qid):
     if not qid:
@@ -42,16 +41,22 @@ def upload(request, qid):
         'result_url': reverse('judge:result', args=[code.id]),
     })
 
-# @login_required
-def result(request, code_id):
+@login_required
+def result(request, code_id=None):
     user = request.user
 
     if code_id:
-        code = get_object_or_404(Code, id=code_id)
-        return render(request, 'judge/result.html', {
-            'code': code,
-        })
+        code = get_object_or_404(Code, id=code_id, user_id=user.id)
     else:
-        return render(request, 'judge/result_list.html', {
-            'codes': Code.objects.filter(user_id=user.id).order_by('-id')[:5],
+        code = Code.objects.last()
+        if not code:
+            raise Http404
+    return render(request, 'judge/result.html', {
+        'code': code,
+    })
+
+@login_required
+def result_list(request):
+    return render(request, 'judge/result_list.html', {
+        'codes': Code.objects.filter(user_id=user.id).order_by('-id')[:5],
         })

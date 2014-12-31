@@ -47,7 +47,7 @@
 		var self = this
 		var upload_url = url.judge.upload + $routeParams.qid + '/'
 
-		$scope.result_url = ''
+		$scope.result_url = url.judge.result
 		$scope.upload_progress = 0
 		$scope.$watch('upload_file', function(){
 			if (! $scope.upload_file)
@@ -55,7 +55,6 @@
 
 			var f = $scope.upload_file
 
-			console.log(f)
 			$scope.upload_progress = 0
 			$scope.upload = $upload.upload({
 				url: upload_url,
@@ -70,6 +69,5 @@
 				console.log(d)
 			})
 		})
-
 	}])
 })();

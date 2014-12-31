@@ -2,8 +2,8 @@
  *  nav
  **********************************************/
 .navbar{
-	margin-right: 100px;
-	margin-left: 100px;
+	padding-right: 100px;
+	padding-left: 100px;
 	border-radius: 0 0 5px 5px;
 	z-index: 50;
 	box-shadow: 0 10px 35px -10px #888;

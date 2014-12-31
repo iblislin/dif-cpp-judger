@@ -1,9 +1,11 @@
-{% for question in questions %}
-	<div>
-		<span>
+<div id="judge-list">
+	{% for question in questions %}
+	<div class="judge-list-item">
+		<span class="judge-q-title">
 			<a href="#{% url 'judge:detail' question.id %}">
 				{{ question.title }}
 			</a>
 		</span>
 	</div>
-{% endfor %}
+	{% endfor %}
+</div>

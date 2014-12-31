@@ -1,29 +1,61 @@
-<h2>
-	{{ question.title }}
-</h2>
-<div>
-	{{ question.content }}
-</div>
+<header>
+	<h1>
+		{{ question.title }}
+	</h1>
+</header>
 
-<form role="form" method="POST"
-	data-ng-init="upload_url = '{% url 'judge:upload' question.id %}'">
-	<div class="form-group">
-		<label for="code_file"></label>
-		<input name="code_file" id="code_file" type="file" class="form-control"
-			nv-file-select
-			uploader="uploader"
-		/>
-		<li ng-repeat="item in uploader.queue">
-			Name: <span data-ng-bind="item.file.name"></span><br/>
-			<button data-ng-click="upload_code(item)">upload</button>
-		</li>
-		<div class="progress">
-			<div class="progress-bar progress-bar-striped active" role="progressbar"
-				style="width: [[uploader.progress]]%;"
-				></div>
-		</div>
-		<input name="csrfmiddlewaretoken" id="csrfmiddlewaretoken_id" type="hidden" class="form-control"
+<section id="content">
+	{{ question.content }}
+</section>
+<section id="sample-input">
+	<header>
+		<h3>Sample Input</h3>
+	</header>
+	<section class="sample-content">
+		{{ question.smp_input|default:'No input data.' }}
+	</section>
+</section>
+<section id="sample-output">
+	<header>
+		<h3>Sample output</h3>
+	</header>
+	<section class="sample-content">
+		<samp>
+			{{ question.smp_output }}
+		</samp>
+	</section>
+</section>
+
+<hr>
+
+<section id="submit-form">
+	<header>
+		<h3>Submit code</h3>
+	</header>
+	<section id="submit-content">
+		<form role="form" method="POST"
+			data-ng-init="upload_url = '{% url 'judge:upload' question.id %}'"
+			>
+			<div class="form-group">
+				<input name="code_file" id="code_file" type="file"
+				data-ng-file-select
+				data-ng-model="upload_file"
+				accept="*.cpp"
+				/>
+			</div><!-- form-group -->
+			<button type="button" class="btn btn-info">Upload</button>
+			{# <li ng-repeat="item in uploader.queue"> #}
+			{#	 Name: <span data-ng-bind="item.file.name"></span><br/> #}
+			{#	 <button data-ng-click="upload_code(item)">upload</button> #}
+			{# </li> #}
+			{# <div class="progress"> #}
+				{#	 <div class="progress-bar progress-bar-striped active" role="progressbar" #}
+					{#		 style="width: [[uploader.progress]]%;" #}
+					{#		 ></div> #}
+				{# </div> #}
+			<input name="csrfmiddlewaretoken" id="csrfmiddlewaretoken_id" type="hidden"
 			value="{{ csrf_token }}"
 			data-ng-model="csrf_token"/>
-	</div><!-- form-group -->
-</form>
+		</form>
+	</section>
+</section>

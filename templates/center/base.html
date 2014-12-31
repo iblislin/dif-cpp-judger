@@ -9,11 +9,13 @@
 		<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 		<script src="{% static 'angular/angular.min.js' %}"></script>
 		<script src="{% static 'angular-route/angular-route.min.js' %}"></script>
-		<script src="{% static 'angular-file-upload/angular-file-upload.min.js' %}"></script>
+		<script src="{% static 'ng-file-upload/angular-file-upload-all.min.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'center/base.css' %}">
 		{% block head %}
 		{% endblock head %}
 	</head>
 	<body>
+		<img src="{% static 'center/beta.png' %}" id="beta-ribbon">
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">

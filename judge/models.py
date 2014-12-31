@@ -40,7 +40,7 @@ class Code(models.Model):
         return '.' + self.SUFFIX_DIR.get(self.lang_type)
 
     def __unicode__(self):
-        return '#{qid} {user} {id}'.format(qid=self.question.id,
+        return u'#{qid} {user} {id}'.format(qid=self.question.id,
             user=self.user.username,
             id=self.id,
             )

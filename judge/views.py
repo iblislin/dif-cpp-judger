@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -28,6 +28,8 @@ def detail(request, qid):
 @csrf_exempt
 @require_http_methods(['POST'])
 def upload(request, qid):
+    if not qid:
+        raise Http404
     user = request.user
     content = request.FILES['file'].read()
     code = Code.objects.create(user_id=user.id, question_id=qid, lang_type='cpp',

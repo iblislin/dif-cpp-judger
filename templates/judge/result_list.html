@@ -3,6 +3,7 @@
 		{% for code in codes %}
 			<li><a href="">
 				#{{ code.id }}
+				{{ code.question.title }}
 				{{ code.status }}
 			</a></li>
 		{% endfor %}

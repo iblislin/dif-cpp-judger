@@ -1,13 +1,20 @@
 (function(){
-	var app = angular.module('center', ['ngRoute', 'angularFileUpload'])
+	var app = angular.module('center', ['ngRoute',
+							 'angularFileUpload', 'angular-loading-bar'])
 	.config(['$interpolateProvider', '$httpProvider', '$routeProvider',
-		function($interpolateProvider, $httpProvider, $routeProvider) {
+			'cfpLoadingBarProvider',
+		function($interpolateProvider, $httpProvider, $routeProvider,
+				cfpLoadingBarProvider) {
 			$interpolateProvider.startSymbol('[[');
 			$interpolateProvider.endSymbol(']]');
 
 			$httpProvider.defaults.xsrfCookieName = 'csrftoken';
 			$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 			$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+
+			cfpLoadingBarProvider.latencyThreshold = 100
+			cfpLoadingBarProvider.includeSpinner = false
+
 
 			$routeProvider.
 				when('/?', {
@@ -35,21 +42,34 @@
 		var self = this
 	}])
 	app.controller('JudgeDetailController', ['$scope', '$http', '$upload',
-	function($scope, $http, $upload){
+				   '$routeParams',
+	function($scope, $http, $upload, $routeParams){
 		var self = this
+		var upload_url = url.judge.upload + $routeParams.qid + '/'
 
-		$scope.uploader = new FileUploader({
-			headers: {
-				'X-Requested-With': 'XMLHttpRequest'
-			}
-		})
-		$scope.uploader.onErrorItem = function(i, d){
+		$scope.result_url = ''
+		$scope.upload_progress = 0
+		$scope.$watch('upload_file', function(){
+			if (! $scope.upload_file)
+				return
+
+			var f = $scope.upload_file
+
+			console.log(f)
+			$scope.upload_progress = 0
+			$scope.upload = $upload.upload({
+				url: upload_url,
+				method: 'POST',
+				file: f,
+			}).progress(function(evt){
+				$scope.upload_progress = parseInt(100.0 * evt.loaded / evt.total)
+			}).success(function(d){
 				console.log(d)
-		}
-		$scope.upload_code = function(item){
-			item.url = $scope.upload_url
-			console.log(item.url)
-			item.upload()
-		}
+				$scope.result_url = d.result_url
+			}).error(function(d){
+				console.log(d)
+			})
+		})
+
 	}])
 })();

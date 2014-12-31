@@ -1,3 +1,4 @@
+
 {% extends "center/base.html" %}
 
 {% load static %}
@@ -28,6 +29,8 @@ var url = {
 	judge:{
 		list: "{% url 'judge:list' %}",
 		detail: "{% url 'judge:detail' %}",
+		result: "{% url 'judge:result' %}",
+		upload: "{% url 'judge:upload' %}",
 	}
 }
 </script>

@@ -23,6 +23,7 @@ class Code(models.Model):
         ('PD', 'Task pending'),
         ('WA', 'Wrong answer'),
     }
+    STATUS_DIR = dict(STATUS_CHOICES)
     SUFFIX_DIR = {
         'cpp': 'cpp',
         'text': 'txt',
@@ -34,13 +35,17 @@ class Code(models.Model):
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default='PD')
     compile_msg = models.TextField(null=True)
     exec_msg = models.TextField(null=True)
+    create_time = models.DateTimeField(auto_now_add=True)
 
     @property
     def suffix(self):
         return '.' + self.SUFFIX_DIR.get(self.lang_type)
 
+    def get_status(self):
+        return self.STATUS_DIR.get(self.status)
+
     def __unicode__(self):
-        return u'#{qid} {user} {id}'.format(qid=self.question.id,
+        return u'#{qid} {user} {status}'.format(qid=self.question.id,
             user=self.user.username,
-            id=self.id,
+            status=self.status,
             )

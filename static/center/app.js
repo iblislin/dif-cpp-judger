@@ -10,7 +10,7 @@
 			$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
 			$routeProvider.
-				when('/', {
+				when('/?', {
 					templateUrl: url.judge.list,
 					controllen: 'CenterController',
 				}).
@@ -34,8 +34,8 @@
 	function($scope, $http){
 		var self = this
 	}])
-	app.controller('JudgeDetailController', ['$scope', '$http', 'FileUploader',
-	function($scope, $http, FileUploader){
+	app.controller('JudgeDetailController', ['$scope', '$http', '$upload',
+	function($scope, $http, $upload){
 		var self = this
 
 		$scope.uploader = new FileUploader({

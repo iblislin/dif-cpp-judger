@@ -1,0 +1,24 @@
+/**********************************************
+ *  nav
+ **********************************************/
+.navbar{
+	margin-right: 100px;
+	margin-left: 100px;
+	border-radius: 0 0 5px 5px;
+	z-index: 50;
+	box-shadow: 0 10px 35px -10px #888;
+}
+
+#beta-ribbon {
+	position: absolute;
+	z-index: 99;
+	width: 100px;
+}
+
+/**********************************************
+ *  main
+ **********************************************/
+main {
+	width: 80%;
+	margin: 30px auto 0;
+}

@@ -42,12 +42,19 @@
 		var self = this
 	}])
 	app.controller('JudgeDetailController', ['$scope', '$http', '$upload',
-				   '$routeParams',
-	function($scope, $http, $upload, $routeParams){
+				   '$routeParams', '$templateCache', '$timeout',
+	function($scope, $http, $upload, $routeParams, $templateCache,
+			 $timeout){
 		var self = this
-		var upload_url = url.judge.upload + $routeParams.qid + '/'
+		var question_id = $routeParams.qid
+		var upload_url = url.judge.upload + question_id + '/'
+		var result_url = function(code_id){
+			var _url = url.judge.result + question_id + '/'
+			if(! code_id)
+				return _url
+			return _url + code_id + '/'
+		}
 
-		$scope.result_url = url.judge.result
 		$scope.upload_progress = 0
 		$scope.$watch('upload_file', function(){
 			if (! $scope.upload_file)
@@ -63,11 +70,17 @@
 			}).progress(function(evt){
 				$scope.upload_progress = parseInt(100.0 * evt.loaded / evt.total)
 			}).success(function(d){
-				console.log(d)
-				$scope.result_url = d.result_url
+				$scope.result_url = d.result_url;
 			}).error(function(d){
 				console.log(d)
 			})
+		})
+		$scope.code = $http.get(result_url()
+		).success(function(d){
+			console.log(d)
+			$scope.code = d.code
+		}).error(function(d){
+			console.log(d)
 		})
 	}])
 })();

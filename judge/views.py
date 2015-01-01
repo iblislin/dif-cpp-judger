@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse
 from django.http.response import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404
@@ -19,6 +20,7 @@ def list(request, page):
 
 @login_required
 def detail(request, qid):
+    user = request.user
     ques = get_object_or_404(Question, id=qid)
     return render(request, 'judge/detail.html', {
         'question': ques,
@@ -42,18 +44,32 @@ def upload(request, qid):
     })
 
 @login_required
-def result(request, code_id=None):
+def result(request, question_id, code_id=None):
     user = request.user
+    payload = {'code': {}}
+    fields = ('status', 'create_time', 'compile_msg', 'exec_msg')
+    question = get_object_or_404(Question, id=question_id)
 
     if code_id:
-        code = get_object_or_404(Code, id=code_id, user_id=user.id)
+        code = get_object_or_404(Code, id=code_id,
+            user_id=user.id,
+            question_id=question_id,
+            )
     else:
-        code = Code.objects.last()
-        if not code:
-            raise Http404
-    return render(request, 'judge/result.html', {
-        'code': code,
-    })
+        try:
+            code = Code.objects.filter(user_id=user.id,
+                question_id=question_id).latest('create_time')
+        except Code.DoesNotExist:
+            return JsonResponse(payload)
+
+    for field in fields:
+        if field == 'create_time':
+            time = humanize.naturaltime(getattr(code, field))
+            payload['code'][field] = time
+            continue
+        payload['code'][field] = getattr(code, field)
+
+    return JsonResponse(payload)
 
 @login_required
 def result_list(request):

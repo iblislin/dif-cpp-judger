@@ -1,3 +1,4 @@
+{% load humanize %}
 <header>
 	<h1>
 		{{ question.title }}
@@ -56,6 +57,28 @@
 	<header>
 		<h3>Result</h3>
 	</header>
-	<ng-include src="result_url">
-	</ng-include>
+	<section class="content-indent">
+		<p>
+			[[ code.create_time ]]
+		</p>
+		<p>
+			Status: [[ code.status ]]
+		</p>
+		<section>
+			<header>
+				<h4>Compiling Message</h4>
+			</header>
+			<pre>
+[[ code.compile_msg ]]
+			</pre>
+		</section>
+		<section>
+			<header>
+				<h4>Executing Message</h4>
+			</header>
+			<pre>
+[[ code.exec_msg ]]
+			</pre>
+		</section>
+	</section>
 </section>

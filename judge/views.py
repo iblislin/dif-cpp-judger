@@ -45,7 +45,7 @@ def upload(request, qid):
 def result(request, question_id, code_id=None):
     user = request.user
     payload = {'code': {}}
-    fields = ('status', 'create_time', 'compile_msg', 'exec_msg')
+    fields = ('status', 'get_status', 'create_time', 'compile_msg', 'exec_msg')
     question = get_object_or_404(Question, id=question_id)
 
     if code_id:
@@ -64,6 +64,9 @@ def result(request, question_id, code_id=None):
         if field == 'create_time':
             time = humanize.naturaltime(getattr(code, field))
             payload['code'][field] = time
+            continue
+        elif field == 'get_status':
+            payload['code'][field] = code.get_status()
             continue
         payload['code'][field] = getattr(code, field)
 

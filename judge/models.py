@@ -7,6 +7,8 @@ class Question(models.Model):
     content = models.TextField()
     smp_input = models.TextField(null=True, blank=True) # sample input
     smp_output = models.TextField(null=True, blank=True) # sample output
+    test_data = models.TextField(null=True, blank=True)
+    test_answer = models.TextField(null=True)
 
     def __unicode__(self):
         return self.title

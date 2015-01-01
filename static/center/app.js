@@ -54,6 +54,19 @@
 				return _url
 			return _url + code_id + '/'
 		}
+		var get_code = function(Callback){
+			$http.get(result_url()
+			).success(function(d){
+				console.log(d)
+				$scope.code = d.code
+				if (typeof Callback == 'function') {
+					Callback()
+				}
+			}).error(function(d){
+				console.log(d)
+			})
+		}
+		get_code()
 
 		$scope.upload_progress = 0
 		$scope.$watch('upload_file', function(){
@@ -67,20 +80,18 @@
 				url: upload_url,
 				method: 'POST',
 				file: f,
-			}).progress(function(evt){
-				$scope.upload_progress = parseInt(100.0 * evt.loaded / evt.total)
 			}).success(function(d){
-				$scope.result_url = d.result_url;
+				console.log(d);
+				(function reload_result(){
+					get_code(function(){
+						if ($scope.code.status == 'PD') {
+							$timeout(reload_result, 500)
+						}
+					})
+				})();
 			}).error(function(d){
 				console.log(d)
 			})
-		})
-		$scope.code = $http.get(result_url()
-		).success(function(d){
-			console.log(d)
-			$scope.code = d.code
-		}).error(function(d){
-			console.log(d)
 		})
 	}])
 })();

@@ -38,9 +38,7 @@ def upload(request, qid):
     task = CppJudgerTask()
     task.delay(code)
     return JsonResponse({
-        'status': code.get_status(),
         'code': code.id,
-        'result_url': reverse('judge:result', args=[code.id]),
     })
 
 @login_required

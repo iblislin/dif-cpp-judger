@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from subprocess import check_call, check_output
+from subprocess import check_call, check_output, Popen, PIPE
 from tempfile import NamedTemporaryFile
 from uuid import uuid4
 
@@ -31,6 +31,10 @@ class BaseJudgerTask(Task):
         _stderr = kwargs.pop('stderr', subprocess.STDOUT)
         return check_output(stderr=_stderr, *args, **kwargs)
 
+    def _popen(self, *args, **kwargs):
+        return Popen(stdout=PIPE, stderr=PIPE, stdin=PIPE,
+            universal_newlines=True, *args, **kwargs)
+
 
 class CppJudgerTask(BaseJudgerTask):
     compiler = '/usr/bin/clang++'
@@ -46,9 +50,17 @@ class CppJudgerTask(BaseJudgerTask):
 
             try:
                 # exectue
-                self.code.exec_msg = self._check_output([self._outfile])
+                _p = self._popen([self._outfile])
+                _output, _error = _p.communicate(self.code.question.test_data)
+                if _error:
+                    self.code.exec_msg = _error
+                    self.code.status = 'EE'
+                    raise Exception
                 # check answer
-                if self.code.exec_msg == self.code.question.test_answer.rstrip():
+                _output = unicode(_output.rstrip())
+                self.code.exec_msg = _output
+                _answer = self.code.question.test_answer.rstrip().replace('\r', '')
+                if _output == _answer:
                     self.code.status = 'AC'
                     ach, _created = Achievement.objects.get_or_create(user=self.code.user,
                         question=self.code.question,
@@ -59,13 +71,11 @@ class CppJudgerTask(BaseJudgerTask):
                         ach.save()
                 else:
                     self.code.status = 'WA'
-            except subprocess.CalledProcessError as e:
-                self.code.exec_msg = e.output
-                self.code.status = 'EE'
+            except Exception as e:
+                print e
 
         except subprocess.CalledProcessError as e:
             self.code.compile_msg = e.output
             self.code.status = 'CE'
-
 
         self.code.save()

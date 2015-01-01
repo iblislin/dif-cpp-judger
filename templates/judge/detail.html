@@ -21,9 +21,7 @@
 		<h3>Sample output</h3>
 	</header>
 	<section class="sample-content">
-		<samp>
-			{{ question.smp_output }}
-		</samp>
+		{{ question.smp_output|apply_markup:'restructuredtext' }}
 	</section>
 </section>
 

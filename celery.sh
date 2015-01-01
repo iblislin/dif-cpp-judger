@@ -1,3 +1,6 @@
 #!/bin/sh
 
-celery -A _ worker -l info
+while [ 1 ]
+do
+	celery -A _ worker -l info
+done

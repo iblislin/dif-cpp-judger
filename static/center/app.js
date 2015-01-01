@@ -17,7 +17,7 @@
 
 
 			$routeProvider.
-				when('/?', {
+				when('/', {
 					templateUrl: url.judge.list,
 					controllen: 'CenterController',
 				}).

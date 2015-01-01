@@ -93,5 +93,11 @@
 				console.log(d)
 			})
 		})
+		$scope.$on('$routeChangeStart', function(event, next, current){
+			if (typeof(current) !== 'undefined'){
+				$templateCache.remove(current.templateUrl);
+			}
+		})
+
 	}])
 })();

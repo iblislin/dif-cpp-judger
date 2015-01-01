@@ -24,6 +24,7 @@ class Code(models.Model):
         ('CE', 'Compiling error'),
         ('EE', 'Executing error'),
         ('PD', 'Task pending'),
+        ('TO', 'Timeout'),
         ('WA', 'Wrong answer'),
     }
     STATUS_DIR = dict(STATUS_CHOICES)

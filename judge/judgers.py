@@ -6,6 +6,7 @@ from tempfile import NamedTemporaryFile
 from uuid import uuid4
 
 from celery import Task
+from celery.exceptions import SoftTimeLimitExceeded
 from django.conf import settings
 
 from .models import Achievement, Code
@@ -49,13 +50,13 @@ class CppJudgerTask(BaseJudgerTask):
                 '-o', self._outfile, self._tmpfile.name])
 
             try:
-                # exectue
+                # execute
                 _p = self._popen([self._outfile])
                 _output, _error = _p.communicate(self.code.question.test_data)
                 if _error:
                     self.code.exec_msg = _error
                     self.code.status = 'EE'
-                    raise Exception
+                    raise subprocess.CalledProcessError('Code: {0} executing error'.format(self.code.id))
                 # check answer
                 _output = unicode(_output.rstrip())
                 self.code.exec_msg = _output
@@ -71,11 +72,15 @@ class CppJudgerTask(BaseJudgerTask):
                         ach.save()
                 else:
                     self.code.status = 'WA'
-            except Exception as e:
+            except subprocess.CalledProcessError as e:
                 print e
+            except SoftTimeLimitExceeded as e:
+                raise e
 
         except subprocess.CalledProcessError as e:
             self.code.compile_msg = e.output
             self.code.status = 'CE'
+        except SoftTimeLimitExceeded as e:
+            self.code.status = 'TO'
 
         self.code.save()

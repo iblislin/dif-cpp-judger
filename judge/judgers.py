@@ -8,7 +8,7 @@ from uuid import uuid4
 from celery import Task
 from django.conf import settings
 
-from .models import Code
+from .models import Achievement, Code
 
 
 class BaseJudgerTask(Task):
@@ -40,12 +40,25 @@ class CppJudgerTask(BaseJudgerTask):
         self._outfile = self._tmpfile.name.rstrip(self.code.suffix)
 
         try:
+            # compile
             self.code.compile_msg = self._check_output([self.compiler,
                 '-o', self._outfile, self._tmpfile.name])
 
             try:
+                # exectue
                 self.code.exec_msg = self._check_output([self._outfile])
-                self.code.status = 'AC'
+                # check answer
+                if self.code.exec_msg == self.code.question.test_answer.rstrip():
+                    self.code.status = 'AC'
+                    ach, _created = Achievement.objects.get_or_create(user=self.code.user,
+                        question=self.code.question,
+                        defaults={'code_id': self.code.id}
+                        )
+                    if not _created:
+                        ach.code = self.code
+                        ach.save()
+                else:
+                    self.code.status = 'WA'
             except subprocess.CalledProcessError as e:
                 self.code.exec_msg = e.output
                 self.code.status = 'EE'

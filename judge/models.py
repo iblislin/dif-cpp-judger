@@ -13,6 +13,7 @@ class Question(models.Model):
     def __unicode__(self):
         return self.title
 
+
 class Code(models.Model):
     LANG_TYPE_CHOICES = (
         ('cpp', 'C++'),
@@ -50,4 +51,28 @@ class Code(models.Model):
         return u'#{qid} {user} {status}'.format(qid=self.question.id,
             user=self.user.username,
             status=self.status,
+            )
+
+
+class Achievement(models.Model):
+    user = models.ForeignKey(User)
+    code = models.ForeignKey(Code)
+    question = models.ForeignKey(Question)
+
+    @property
+    def is_pass(self):
+        """
+        :return: get the latest AC code, if not return false
+        """
+        d = self.code.objects.filter(user_id=self.user.id, status='AC')[:1]
+        if d:
+            return d
+        else:
+            return False
+
+    def __unicode__(self):
+        return '#{question} {user} {code}'.format(
+                question=self.question.title,
+                user=self.user.username,
+                code=self.code.id,
             )

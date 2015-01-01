@@ -1,11 +1,26 @@
 <div id="judge-list">
-	{% for question in questions %}
-	<div class="judge-list-item">
-		<span class="judge-q-title">
-			<a href="#{% url 'judge:detail' question.id %}">
-				{{ question.title }}
-			</a>
-		</span>
-	</div>
-	{% endfor %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th width="10%">#</th>
+				<th>Question</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for question, achi in judge_list %}
+			<tr class="judge-list-item">
+				<td>
+					{% if achi %}
+					<span class="judge-list-achi glyphicon glyphicon-ok"></span>
+					{% endif %}
+				</td>
+				<td class="judge-q-title">
+					<a href="#{% url 'judge:detail' question.id %}">
+						{{ question.title }}
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>

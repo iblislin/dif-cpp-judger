@@ -7,15 +7,25 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from .models import Code, Question
+from .models import Achievement, Code, Question
 from .judgers import CppJudgerTask
 
 @login_required
 def list(request, page):
+    user = request.user
     page = page if page else 0
     num = settings.JUDGE_ITEM_PER_LIST
+    questions = Question.objects.all()[page*num:(page + 1)*num]
+    ls = []
+
+    for q in questions:
+        try:
+            _achi = q.achievement_set.get(user_id=user)
+            ls.append((q, _achi))
+        except Exception as e:
+            ls.append((q, None))
     return render(request, 'judge/list.html', {
-        'questions': Question.objects.all()[page*num:(page + 1)*num],
+        'judge_list': ls,
         })
 
 @login_required

@@ -1,4 +1,4 @@
-{% load humanize %}
+{% load humanize markup_tags %}
 <header>
 	<h1>
 		{{ question.title }}
@@ -6,14 +6,14 @@
 </header>
 
 <section id="content">
-	{{ question.content }}
+	{{ question.content|apply_markup:'restructuredtext' }}
 </section>
 <section id="sample-input">
 	<header>
 		<h3>Sample Input</h3>
 	</header>
 	<section class="sample-content">
-		{{ question.smp_input|default:'No input data.' }}
+		{{ question.smp_input|default:'No input data.'|apply_markup:'restructuredtext' }}
 	</section>
 </section>
 <section id="sample-output">

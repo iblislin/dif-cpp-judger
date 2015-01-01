@@ -5,3 +5,5 @@ django-bower
 celery
 django-celery
 librabbitmq
+docutils
+django-markup

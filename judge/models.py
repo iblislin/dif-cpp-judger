@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class Question(models.Model):
     title = models.CharField(max_length=4096)
     content = models.TextField()
-    smp_input = models.TextField(null=True) # sample input
-    smp_output = models.TextField(null=True) # sample output
+    smp_input = models.TextField(null=True, blank=True) # sample input
+    smp_output = models.TextField(null=True, blank=True) # sample output
 
     def __unicode__(self):
         return self.title

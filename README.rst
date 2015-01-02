@@ -38,6 +38,13 @@ There is some vars need to be configure in ``_/settings.py``.
 * ``JUDGE_ITEM_PER_LIST``: Currently no function.
 * ``JUDGE_CPP_COMPILER``: The cpp compiler.
 
+After configuring your ``settings.py``, please issue the following instructions
+
+::
+
+./manage.py syncdb
+./manage.py bower install
+
 Run server
 ===========
 Besides running your favor web server you also need to start the celery worker using ``./celery.sh``.

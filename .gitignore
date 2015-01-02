@@ -4,3 +4,4 @@
 static/bower_components/
 migrations/
 .venv
+_/settings.py

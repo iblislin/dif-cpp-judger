@@ -5,8 +5,8 @@ dif-cpp-judger
 **Note: This project currently is under development and has some security issue.Use it at your own risk.**
 
 This is a django project for cpp education.
-We can write down some cpp question.
-Let user upload their codes to compile and execute at server side.
+We can write down some cpp questions.
+Let users upload their codes to compile and execute at server side.
 
 Any pull requests are wellcome.
 
@@ -47,4 +47,3 @@ Besides running your favor web server you also need to start the celery worker u
 License
 ========
 DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE Version 2
-

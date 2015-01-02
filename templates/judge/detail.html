@@ -1,8 +1,8 @@
 {% load humanize markup_tags %}
 <header>
-	<h1>
+	<h2>
 		{{ question.title }}
-	</h1>
+	</h2>
 </header>
 
 <section id="content">
@@ -47,6 +47,9 @@
 			<span id="file-name">
 				[[ upload_file[0].name ]]
 			</span>
+			<span class="glyphicon glyphicon-exclamation-sign"
+				data-ng-show="upload_error"
+				></span>
 			<input name="csrfmiddlewaretoken" id="csrfmiddlewaretoken_id" type="hidden"
 			value="{{ csrf_token }}"
 			data-ng-model="csrf_token"/>

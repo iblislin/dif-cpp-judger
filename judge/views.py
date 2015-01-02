@@ -43,6 +43,14 @@ def upload(request, qid):
         raise Http404
     user = request.user
     content = request.FILES['file'].read()
+
+    # examine content
+    try:
+        content.decode('utf-8')
+    except UnicodeDecodeError as e:
+        return JsonResponse({
+            'error': 'Uploading error. Not a cpp file',
+            })
     code = Code.objects.create(user_id=user.id, question_id=qid, lang_type='cpp',
         content=content)
     task = CppJudgerTask()

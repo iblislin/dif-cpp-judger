@@ -82,6 +82,14 @@
 				file: f,
 			}).success(function(d){
 				console.log(d);
+
+				if (d.error) {
+					$scope.upload_error = d.error
+					return
+				}
+				else {
+					$scope.upload_error = ''
+				}
 				(function reload_result(){
 					get_code(function(){
 						if ($scope.code.status == 'PD') {

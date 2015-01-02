@@ -41,3 +41,10 @@ There is some vars need to be configure in ``_/settings.py``.
 Run server
 ===========
 Besides running your favor web server you also need to start the celery worker using ``./celery.sh``.
+
+
+********
+License
+********
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE Version 2
+

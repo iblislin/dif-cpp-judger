@@ -4,7 +4,7 @@ dif-cpp-judger
 
 **Note: This project currently is under development and has some security issue.Use it at your own risk.**
 
-The is a django project for cpp education.
+This is a django project for cpp education.
 We can write down some cpp question.
 Let user upload their codes to compile and execute at server side.
 

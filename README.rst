@@ -6,7 +6,7 @@ dif-cpp-judger
 
 The is a django project for cpp education.
 We can write down some cpp question.
-Let user uoload their code to compile and execute at server side.
+Let user upload their codes to compile and execute at server side.
 
 Any pull requests are wellcome.
 

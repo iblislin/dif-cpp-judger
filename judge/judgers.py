@@ -38,7 +38,7 @@ class BaseJudgerTask(Task):
 
 
 class CppJudgerTask(BaseJudgerTask):
-    compiler = '/usr/bin/clang++'
+    compiler = settings.JUDGE_CPP_COMPILER
 
     def run(self, code):
         super(CppJudgerTask, self).run(code)
@@ -75,6 +75,7 @@ class CppJudgerTask(BaseJudgerTask):
             except subprocess.CalledProcessError as e:
                 print e
             except SoftTimeLimitExceeded as e:
+                _p.kill()
                 raise e
 
         except subprocess.CalledProcessError as e:
